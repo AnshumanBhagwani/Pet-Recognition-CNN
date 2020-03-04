@@ -5,27 +5,38 @@ from keras.layers import Flatten
 from keras.layers import Dense
 
 
+#Initialization
 classifier = Sequential()
+
+#convolution
 classifier.add(Convolution2D(32,3,3, input_shape = (64,64,3), activation = 'relu'))
+#Pooling
 classifier.add(MaxPooling2D(pool_size = (2,2)))
 
-
+#second layer
 classifier.add(Convolution2D(32,3,3, activation = 'relu'))
 classifier.add(MaxPooling2D(pool_size = (2,2)))
 
+#Third layer
 classifier.add(Convolution2D(64,3,3, activation = 'relu'))
 classifier.add(MaxPooling2D(pool_size = (2,2)))
+#Flattening
 classifier.add(Flatten())
+
+
+#Full Connection
 classifier.add(Dense(output_dim = 128, activation = 'relu'))
 classifier.add(Dense(output_dim = 1, activation = 'sigmoid'))
 
-
+#compilation
 classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
 
 
 
 from keras.preprocessing.image import ImageDataGenerator 
 
+
+#fitting CNN to the images
 train_datagen = ImageDataGenerator(
         rescale=1./255,
         shear_range=0.2,
@@ -53,23 +64,19 @@ classifier.fit_generator(
         validation_data=tstset,
         validation_steps=62)
 
+
+#to check for single3 test image
+'''
 import numpy as np
 
 from keras.preprocessing import image
-
-
-tstimg = image.load_img('dataset/single_prediction/cat_or_dog_1.jpg', target_size = (64, 64))
-tstimg = image.img_to_array(tstimg)
-tstimg = np.expand_dims(tstimg , axis = 0)
-result = classifier.predict(tstimg)
-trset.class_indices
-
 
 tstimg1 = image.load_img('dataset/single_prediction/qw.jpg', target_size = (64, 64))
 tstimg1 = image.img_to_array(tstimg1)
 tstimg1 = np.expand_dims(tstimg1 , axis = 0)
 result1 = classifier.predict(tstimg1)
 trset.class_indices
+'''
 
 
 '''from keras import backend as K
